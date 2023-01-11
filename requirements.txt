@@ -7,3 +7,4 @@ pydicom
 pillow
 pylibjpeg
 pylibjpeg-libjpeg
+SimpleITK

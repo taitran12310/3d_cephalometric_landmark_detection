@@ -32,7 +32,8 @@ testcsv = 'skull_test1_m_mini.csv'
 
 dataRoot = "processed_data/"
 imageTrainDir = dataRoot + "images/train/"
-imageTestDir = dataRoot + "images/test/"
+imageTestDir = dataRoot + "images/train/"
+# imageTestDir = dataRoot + "images/test/"
 # epochs = 1000
 epochs = 1000
 saveName = "model.pt"

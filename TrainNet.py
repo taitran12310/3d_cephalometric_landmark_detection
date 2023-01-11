@@ -26,7 +26,7 @@ def train_model(corseNet, fine_LSTM, dataloaders, criterion_coarse, optimizer,
     for epoch in range(num_epochs):
         for phase in ['train', 'val']:
             # print ("1")
-            print("epoch: " + epoch + " - phase: " + phase)
+            print("epoch: " + str(epoch) + " - phase: " + phase)
             if phase == 'train':
                 corseNet.train(True)  # Set model to training mode
                 fine_LSTM.train(True)

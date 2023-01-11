@@ -1,7 +1,7 @@
 import torch
 import os
 import numpy as np
-from MyDataLoader import loadDicomMultiFile
+from MyDataLoader import loadDatasetImage
 import MyUtils
 
 
@@ -18,9 +18,9 @@ lstmModel = torch.load(MODEL_FOLDER_PATH + 'LSTM_model.pt', map_location=device)
 corseNetModel = torch.load(MODEL_FOLDER_PATH + 'corseNet_model.pt', map_location=device)
 
 img_path = os.path.join("processed_data/images/train/", "ceph1")
-img = loadDicomMultiFile(img_path)
+img = loadDatasetImage(img_path)
 
-tensors = torch.tensor(np.array(img[0]))
+tensors = torch.tensor(np.array(img))
 tensors = tensors.to(device=device, dtype=torch.float32)
 coarse_heatmap, coarse_features = corseNetModel(tensors)
 
