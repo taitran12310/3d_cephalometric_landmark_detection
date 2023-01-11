@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 import MyUtils
 import MyNetworkLayer as MNL
+import numpy as np
 
 class coarseNet(nn.Module):
     def __init__(self, landmarksNum, useGPU, image_scale):
@@ -29,10 +30,12 @@ class fine_LSTM(nn.Module):
         super(fine_LSTM, self).__init__()
         self.landmarkNum = landmarkNum
         self.usegpu = usegpu
-        self.encoder = MNL.U_Net3D_encoder(1, 64)
+        # self.encoder = MNL.U_Net3D_encoder(1, 64)
+        self.encoder = MNL.U_Net3D(1, 64)
         self.iteration = iteration
         self.crop_size = crop_size
-        self.size_tensor = torch.tensor([1 / 767, 1 / 767, 1 / 575]).cuda(self.usegpu)
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        self.size_tensor = torch.tensor([1 / 767, 1 / 767, 1 / 575], device=device)
         self.decoders_offset_x = nn.Conv1d(landmarkNum, landmarkNum, 512 + 64, 1, 0, groups=landmarkNum)
         self.decoders_offset_y = nn.Conv1d(landmarkNum, landmarkNum, 512 + 64, 1, 0, groups=landmarkNum)
         self.decoders_offset_z = nn.Conv1d(landmarkNum, landmarkNum, 512 + 64, 1, 0, groups=landmarkNum)

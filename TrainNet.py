@@ -24,9 +24,9 @@ def train_model(corseNet, fine_LSTM, dataloaders, criterion_coarse, optimizer,
     size_tensor = torch.tensor([1 / 767, 1 / 767, 1 / 575])
 
     for epoch in range(num_epochs):
-
         for phase in ['train', 'val']:
             # print ("1")
+            print("epoch: " + epoch + " - phase: " + phase)
             if phase == 'train':
                 corseNet.train(True)  # Set model to training mode
                 fine_LSTM.train(True)
@@ -41,8 +41,9 @@ def train_model(corseNet, fine_LSTM, dataloaders, criterion_coarse, optimizer,
 
             # Iterate over data.
             lent = len(dataloaders[phase])
-
+            # print("lent", lent)
             for ide in range(lent):
+                
                 data = dataloaders[phase][ide]
 
                 inputs, inputs_origin, labels, image_name = data['DICOM'], data['DICOM_origin'], data[
@@ -72,3 +73,7 @@ def train_model(corseNet, fine_LSTM, dataloaders, criterion_coarse, optimizer,
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(
         time_elapsed // 60, time_elapsed % 60))
+
+    if(saveName):
+        torch.save(fine_LSTM, 'output/LSTM_' + saveName)
+        torch.save(corseNet, 'output/corseNet_' + saveName)

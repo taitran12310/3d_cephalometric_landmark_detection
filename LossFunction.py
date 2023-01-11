@@ -11,10 +11,10 @@ class coarse_heatmap(nn.Module):
         self.use_gpu = use_gpu
         self.batchSize = batchSize
         self.landmarkNum = landmarkNum
-        self.l1Loss = nn.L1Loss(size_average=False)
+        self.l1Loss = nn.L1Loss(reduction='sum')
         self.Long, self.higth, self.width = image_scale
-        self.binaryLoss = nn.BCEWithLogitsLoss(size_average=False)
-        self.HeatMap_groundTruth = torch.zeros(self.Long * 2, self.higth * 2, self.width * 2).cuda(self.use_gpu)
+        self.binaryLoss = nn.BCEWithLogitsLoss(reduction='sum')
+        self.HeatMap_groundTruth = torch.zeros(self.Long * 2, self.higth * 2, self.width * 2)#.cuda(self.use_gpu)
 
         rr = 21
         dev = 2

@@ -31,12 +31,15 @@ traincsv = 'skull_train1_m_mini.csv'
 testcsv = 'skull_test1_m_mini.csv'
 
 dataRoot = "processed_data/"
+imageTrainDir = dataRoot + "images/train/"
+imageTestDir = dataRoot + "images/test/"
+# epochs = 1000
 epochs = 1000
-saveName = "test"
+saveName = "model.pt"
 testName = "190VGG19_bn_concatFPN_originOff_withIceptionkernel_newdata_32_noPretrain_try.pkl"
 
-fine_LSTM = MyModel.fine_LSTM(landmarkNum, use_gpu, iteration, cropSize).cuda(use_gpu)
-corseNet = MyModel.coarseNet(landmarkNum, use_gpu, image_scale).cuda(use_gpu)
+fine_LSTM = MyModel.fine_LSTM(landmarkNum, use_gpu, iteration, cropSize)#.cuda(use_gpu)
+corseNet = MyModel.coarseNet(landmarkNum, use_gpu, image_scale)#.cuda(use_gpu)
 
 print("image scale ", image_scale)
 
@@ -49,13 +52,13 @@ transform_origin = transforms.Compose([
 ])
 
 train_dataset_origin = LandmarksDataset(csv_file=dataRoot + traincsv,
-                                        root_dir=dataRoot + "images",
+                                        root_dir=imageTrainDir,
                                         transform=transform_origin,
                                         landmarksNum=landmarkNum
                                         )
-
+                                        
 val_dataset = LandmarksDataset(csv_file=dataRoot + testcsv,
-                               root_dir=dataRoot + "images",
+                               root_dir=imageTestDir,
                                transform=transform_origin,
                                landmarksNum=landmarkNum
                                )
@@ -71,17 +74,15 @@ for data in train_dataloader_t:
     train_dataloader.append(data)
 
 val_dataloader_t = DataLoader(val_dataset, batch_size=batchSize,
-                              shuffle=False, num_workers=4)
+                              shuffle=False, num_workers=0)
 
 for data in val_dataloader_t:
     val_dataloader.append(data)
 
-print(len(train_dataloader), len(val_dataloader))
-
 train_dataloader_t = ''
 val_dataloader_t = ''
 
-dataloaders = {'train': train_dataloader_t, 'val': val_dataloader}
+dataloaders = {'train': train_dataloader, 'val': val_dataloader}
 
 criterion_coarse = LossFunction.coarse_heatmap(use_gpu, batchSize, landmarkNum, image_scale)
 

@@ -5,6 +5,8 @@ from torch.utils.data import Dataset
 import os
 import pandas as pd
 
+from MyUtils import loadDicomMultiFile
+
 class Rescale(object):
     """Rescale the image in a sample to a given size.
 
@@ -64,11 +66,21 @@ class LandmarksDataset(Dataset):
         return len(self.landmarks_frame)
 
     def __getitem__(self, idx):
-        img_name = os.path.join(self.root_dir, "72_" + self.landmarks_frame.iloc[idx, 0])
+        print('LandmarksDataset - getitem')
+        # self.landmarks_frame.iloc[idx, 0] => image name, idx: row, 0: column
+        # img_name = os.path.join(self.root_dir, "72_" + self.landmarks_frame.iloc[idx, 0]) # ???
+        print('idx', idx)
+        print("landmarks_frame")
+        print(self.landmarks_frame.to_string())
+        print("landmarks_frame.iloc", self.landmarks_frame.iloc[idx, 0])
+        img_name = os.path.join(self.root_dir, self.landmarks_frame.iloc[idx, 0])
         img_name_origin = os.path.join(self.root_dir, self.landmarks_frame.iloc[idx, 0])
 
-        image = np.load(img_name)
-        image_origin = np.load(img_name_origin)
+        # image = np.load(img_name)
+        # image_origin = np.load(img_name_origin)
+
+        image = loadDicomMultiFile(img_name)[0]
+        image_origin = loadDicomMultiFile(img_name_origin)[0]
 
         landmarks = self.landmarks_frame.iloc[idx, 1:self.landmarkNum * 3 + 1].values.astype('float')
         landmarks = landmarks.reshape(-1, 3)
