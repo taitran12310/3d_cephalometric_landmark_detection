@@ -3,8 +3,6 @@ import torch
 import numpy as np
 import math
 import SimpleITK as sitk
-import os
-import pydicom
 from operator import itemgetter
 
 def Mydist(a, b):

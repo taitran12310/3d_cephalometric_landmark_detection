@@ -3,8 +3,5 @@ torchvision
 pandas
 numpy
 matplotlib
-pydicom
 pillow
-pylibjpeg
-pylibjpeg-libjpeg
 SimpleITK
