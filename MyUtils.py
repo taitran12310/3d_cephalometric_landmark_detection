@@ -42,7 +42,7 @@ def adjustment(ROIs, labels):
     return ROIs
 
 def get_coordinates_from_coarse_heatmaps(predicted_heatmap, global_coordinate):
-    lent = predicted_heatmap.size()[0]
+    lent = len(predicted_heatmap)
     index = [1, 2, 0]
     global_coordinate_permute = global_coordinate.permute(3, 0, 1, 2)
     predict = [torch.sum((global_coordinate_permute * predicted_heatmap[i]).view(3, -1), dim = 1).unsqueeze(0) for i in range(lent)]

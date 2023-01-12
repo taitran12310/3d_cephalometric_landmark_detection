@@ -57,8 +57,9 @@ def train_model(corseNet, fine_LSTM, dataloaders, criterion_coarse, optimizer,
                 coarse_landmarks = MyUtils.get_coordinates_from_coarse_heatmaps(coarse_heatmap, global_coordinate).unsqueeze(0)
                 ROIs = coarse_landmarks.cpu().detach().numpy() + np.random.uniform(0, 0.02, labels.size())
 
+                ROIs_tensor = torch.from_numpy(ROIs)
                 # fine-scale landmark detection
-                fine_landmarks = fine_LSTM(ROIs, labels, inputs_origin)
+                fine_landmarks = fine_LSTM(coarse_landmarks=ROIs_tensor, labels=labels, inputs_origin=inputs_origin, coarse_feature=coarse_features, phase=phase, size_tensor_inv=size_tensor)
 
                 # calculate loss
                 loss = 0
